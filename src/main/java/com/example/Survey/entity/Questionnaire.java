@@ -18,100 +18,66 @@ public class Questionnaire {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "serial_number")
 	private Integer serialNumber;
-
+	
 //	問卷名稱
 	@Column(name = "survey_name")
 	private String surveyName;
-
-//	問卷說明文 (可空)
+	
+//	問卷說明(可空)
 	@Column(name = "survey_caption")
 	private String surveyCaption;
-
-//	問卷內容-------------
-
-//	題目
-	@Column(name = "survey_question")
-	private String surveyQuestion;
-
-//	必填與否
-	@Column(name = "required")
-	private String required;
-
-//	單選與否
-	@Column(name = "multiple")
-	private String multiple;
-
-//	選項內容
-	@Column(name = "survey_option")
-	private String surveyOption;
-
-//	問卷狀態 (0=未開放, 1=開放中, 2=已結束)
-	@Column(name = "status")
-	private int status;
 	
-//	開始時間 (預設為當日)
+//	問卷狀態 (0=未開放, 1=開放中, 2=已結束)
+	@Column(name = "survey_status")
+	private int surveyStatus;
+	
+//	開始日
 	@Column(name = "start_date")
 	private LocalDate startDate;
-
-//	結束時間 (預設為當日+7)
+	
+//	結束日
 	@Column(name = "end_date")
 	private LocalDate endDate;
-
-//	------- 建構方法 -------
+	
+//	-----------------------------
 
 	public Questionnaire() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 
-	public Questionnaire(Integer serialNumber, String surveyName, String surveyCaption, LocalDate startDate,
-			LocalDate endDate, int status, String surveyQuestion, String required, String multiple,
-			String surveyOption) {
+	public Questionnaire(Integer serialNumber, String surveyName, String surveyCaption, int surveyStatus,
+			LocalDate startDate, LocalDate endDate) {
 		super();
 		this.serialNumber = serialNumber;
 		this.surveyName = surveyName;
 		this.surveyCaption = surveyCaption;
+		this.surveyStatus = surveyStatus;
 		this.startDate = startDate;
 		this.endDate = endDate;
-		this.status = status;
-		this.surveyQuestion = surveyQuestion;
-		this.required = required;
-		this.multiple = multiple;
-		this.surveyOption = surveyOption;
 	}
-
-//	新增問卷資訊(標題、說明、開始時間、結束時間、問卷狀態)
-	public Questionnaire(String surveyName, String surveyCaption, LocalDate startDate, LocalDate endDate, int status, String surveyQuestion, String required, String multiple, String surveyOption) {
+	
+//	新增問卷用
+	public Questionnaire(String surveyName, String surveyCaption, int surveyStatus, LocalDate startDate,
+			LocalDate endDate) {
 		super();
 		this.surveyName = surveyName;
 		this.surveyCaption = surveyCaption;
+		this.surveyStatus = surveyStatus;
 		this.startDate = startDate;
 		this.endDate = endDate;
-		this.status = status;
-		this.surveyQuestion = surveyQuestion;
-		this.required = required;
-		this.multiple = multiple;
-		this.surveyOption = surveyOption;
 	}
 	
-//	新增問卷題目(題目、必填、單複選、選項)
-	public Questionnaire(String surveyQuestion, String required, String multiple, String surveyOption) {
-		super();
-		this.surveyQuestion = surveyQuestion;
-		this.required = required;
-		this.multiple = multiple;
-		this.surveyOption = surveyOption;
-	}
-	
-	
-
-//------- get set -------
+//	------------------------------
 
 	public Integer getSerialNumber() {
 		return serialNumber;
 	}
 
 //	流水號不用set
+//	public void setSerialNumber(Integer serialNumber) {
+//		this.serialNumber = serialNumber;
+//	}
 
 	public String getSurveyName() {
 		return surveyName;
@@ -129,6 +95,14 @@ public class Questionnaire {
 		this.surveyCaption = surveyCaption;
 	}
 
+	public int getSurveyStatus() {
+		return surveyStatus;
+	}
+
+	public void setSurveyStatus(int surveyStatus) {
+		this.surveyStatus = surveyStatus;
+	}
+
 	public LocalDate getStartDate() {
 		return startDate;
 	}
@@ -144,45 +118,7 @@ public class Questionnaire {
 	public void setEndDate(LocalDate endDate) {
 		this.endDate = endDate;
 	}
-
-	public int getStatus() {
-		return status;
-	}
-
-	public void setStatus(int status) {
-		this.status = status;
-	}
-
-	public String getSurveyQuestion() {
-		return surveyQuestion;
-	}
-
-	public void setSurveyQuestion(String surveyQuestion) {
-		this.surveyQuestion = surveyQuestion;
-	}
-
-	public String getRequired() {
-		return required;
-	}
-
-	public void setRequired(String required) {
-		this.required = required;
-	}
-
-	public String getMultiple() {
-		return multiple;
-	}
-
-	public void setMultiple(String multiple) {
-		this.multiple = multiple;
-	}
-
-	public String getSurveyOption() {
-		return surveyOption;
-	}
-
-	public void setSurveyOption(String surveyOption) {
-		this.surveyOption = surveyOption;
-	}
-
+	
+	
+	
 }

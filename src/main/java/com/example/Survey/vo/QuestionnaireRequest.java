@@ -3,58 +3,48 @@ package com.example.Survey.vo;
 import java.time.LocalDate;
 import java.util.List;
 
+import com.example.Survey.entity.Questionnaire;
+
+
+
 public class QuestionnaireRequest {
 
 	private Integer serialNumber;
-	
+
 	private String surveyName;
-	
+
 	private String surveyCaption;
-	
+
+	private String surveyStatus;
+
 	private LocalDate startDate;
-	
+
 	private LocalDate endDate;
 	
-	private int status;
+//	쬟간격⅓Ξ
+	List<Integer> deleteSurveyList;
 	
-	private String surveyQuestion;
-	
-	private String required;
-	
-	private String multiple;
-	
-	private String surveyOption;
-	
-//	쬟간격⅓List
-	private List<Integer> surveyList;
-	
-//	------------------------
+
+//	-------------------------------
 
 	public QuestionnaireRequest() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 
-	public QuestionnaireRequest(Integer serialNumber, String surveyName, String surveyCaption, LocalDate startDate,
-			LocalDate endDate, int status, String surveyQuestion, String required, String multiple,
-			String surveyOption) {
+	public QuestionnaireRequest(Integer serialNumber, String surveyName, String surveyCaption, String surveyStatus,
+			LocalDate startDate, LocalDate endDate) {
 		super();
 		this.serialNumber = serialNumber;
 		this.surveyName = surveyName;
 		this.surveyCaption = surveyCaption;
+		this.surveyStatus = surveyStatus;
 		this.startDate = startDate;
 		this.endDate = endDate;
-		this.status = status;
-		this.surveyQuestion = surveyQuestion;
-		this.required = required;
-		this.multiple = multiple;
-		this.surveyOption = surveyOption;
 	}
 	
-	
+//	-----------------------------------
 
-//	-------------------------
-	
 	public Integer getSerialNumber() {
 		return serialNumber;
 	}
@@ -79,6 +69,14 @@ public class QuestionnaireRequest {
 		this.surveyCaption = surveyCaption;
 	}
 
+	public String getSurveyStatus() {
+		return surveyStatus;
+	}
+
+	public void setSurveyStatus(String surveyStatus) {
+		this.surveyStatus = surveyStatus;
+	}
+
 	public LocalDate getStartDate() {
 		return startDate;
 	}
@@ -95,54 +93,12 @@ public class QuestionnaireRequest {
 		this.endDate = endDate;
 	}
 
-	public int getStatus() {
-		return status;
+	public List<Integer> getDeleteSurveyList() {
+		return deleteSurveyList;
 	}
 
-	public void setStatus(int status) {
-		this.status = status;
+	public void setDeleteSurveyList(List<Integer> deleteSurveyList) {
+		this.deleteSurveyList = deleteSurveyList;
 	}
 
-	public String getSurveyQuestion() {
-		return surveyQuestion;
-	}
-
-	public void setSurveyQuestion(String surveyQuestion) {
-		this.surveyQuestion = surveyQuestion;
-	}
-
-	public String getRequired() {
-		return required;
-	}
-
-	public void setRequired(String required) {
-		this.required = required;
-	}
-
-	public String getMultiple() {
-		return multiple;
-	}
-
-	public void setMultiple(String multiple) {
-		this.multiple = multiple;
-	}
-
-	public String getSurveyOption() {
-		return surveyOption;
-	}
-
-	public void setSurveyOption(String surveyOption) {
-		this.surveyOption = surveyOption;
-	}
-
-	public List<Integer> getSurveyList() {
-		return surveyList;
-	}
-
-	public void setSurveyList(List<Integer> surveyList) {
-		this.surveyList = surveyList;
-	}
-	
-	
-	
 }
