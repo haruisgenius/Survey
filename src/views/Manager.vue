@@ -15,6 +15,7 @@ export default {
       surveyData: [], // 資料內容
       showCheckBox: true, // 是否顯示勾選框
       showWatchBtn: true, // 是否顯示觀看統計
+      isCQuestion: false,  // 題目流水號
 
       searchText: '', // 搜尋關鍵字
       searchStartDate: '', // 開始時間
@@ -34,8 +35,8 @@ export default {
     },
     changeSurveyStatus() {
       fetch("http://localhost:8080/change_survey_status")
-      .then(res => res.json())
-      .then(data => this.surveyData = data.questionnaireList.reverse())
+        .then(res => res.json())
+        .then(data => this.surveyData = data.questionnaireList.reverse())
     },
     updatefileredData() {
       let keyword = ''

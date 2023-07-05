@@ -28,6 +28,7 @@ import { RouterLink } from "vue-router"
     background-color: #FDD7EE;
     border: solid #F895BE 2px;
     border-radius: 0.5rem;
+    // position: fixed;  // 固定位置
 
     // 按鈕變絲滑
     transition: 0.3s;

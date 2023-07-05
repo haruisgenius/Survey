@@ -22,6 +22,11 @@ const router = createRouter({
       path: '/manager/create-survey/question',
       name: 'manager-create-question',
       component: () => import('../views/SurveyQuestion.vue')
+    },
+    {
+      path: '/userAnswer/:serialNumber?',  // ? > 可有可無
+      name: 'user-answer',
+      component: () => import('../views/UAnswer.vue')
     }
   ]
 })

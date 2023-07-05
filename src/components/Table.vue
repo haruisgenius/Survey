@@ -20,6 +20,7 @@ export default {
     // 顯示勾選框
     showCheckBox: false,
     showWatchBtn: false,  // 觀看統計
+    isCQuestion: false,   // 題目流水號
   },
   data() {
     return {
@@ -43,9 +44,9 @@ export default {
     }
   },
   methods: {
-    createAnswer() {
+    createAnswer(item) {
       // let serialNumber = this.columns.serialNumber
-      console.log(this.columns)
+      this.$emit('answer', item);
     },
     // 前一頁方法
     previousPage() {
@@ -110,6 +111,7 @@ export default {
             <th v-if="showCheckBox">
               <div type="button" class="delete-btn button"></div>
             </th>
+            <th v-if="isCQuestion">#</th>
             <th v-for="column in columns">{{ column.column }}</th>
             <th v-if="!showCheckBox">問卷作答</th>
             <th v-if="showWatchBtn">觀看統計</th>
@@ -126,15 +128,19 @@ export default {
               <input type="checkbox" name="chooseBox" id="chooseBox">
             </td>
             <!-- 迴圈印出該頁對應標題欄位之內容 -->
+            <td v-if="isCQuestion">{{ index + 1 }}</td>  <!-- 序號 -->
             <td v-for="column in columns">{{ item[column.key] }}</td>
             <td v-if="!showCheckBox" calss="d-flex justify-content-center">
-              <div type="button" class="answer-btn text-center" @click="createAnswer">作答</div>
+              <!--               到``中間的網址 取此行表格資料之問卷流水號 -->      <!-- 不用@click="createAnswer(item)" -->             
+              <RouterLink :to="`/userAnswer/${ item.serialNumber }`" class="work text-center" v-if="item.surveyStatus == '開放中'">作答</RouterLink>
+              <div class="cannot text-center" v-else>作答</div>
             </td>
             <td v-if="showWatchBtn" calss="d-flex justify-content-center">
-              <div type="button" class="watch-count text-center">觀看</div>
+              <div class="cannot btn text-center" v-if="item.surveyStatus == '未開放'">觀看</div>
+              <RouterLink to="/" type="button" class="work-btn text-center" v-else>觀看</RouterLink>
             </td>
             <td v-if="showCheckBox" calss="d-flex justify-content-center">
-              <div type="button" class="update-btn text-center">修改</div>
+              <RouterLink to="/" type="button" class="work-btn text-center" @click="editItem(item)">修改</RouterLink>
             </td>
           </tr>
         </tbody>
@@ -212,19 +218,91 @@ export default {
     border-radius: 10%;
     margin-bottom: 0.5rem;
 
-    .watch-count {
-      width: 3rem;
-      // background-color: aqua;
+    // .watch-count {
+    //   width: 3rem;
+    //   text-decoration: none;
+    //   padding: 0.2rem 0.7rem;
+    //   color: #ff6a00;
+    //   background-color: #F8DC95;
+    //   border: solid #ff8400 2px;
+    //   border-radius: 0.5rem;
+
+    //   // 按鈕變絲滑
+    //   transition: 0.3s;
+
+    //   &:hover {
+    //     cursor: pointer;
+    //     scale: 1.05;
+    //   }
+
+    //   // 點擊時效果
+    //   &:active {
+    //     scale: 0.95;
+    //   }
+    // }
+
+    .work-btn {
+      width: 3.5rem;
+      text-decoration: none;
+      padding: 0.1rem 0.63rem 0.1rem 0.63rem;
+      color: #ff6a00;
+      background-color: #F8DC95;
+      border: solid #ff8400 2px;
+      border-radius: 0.5rem;
+
+      transition: 0.3s;
+      &:hover {
+        cursor: pointer;
+        scale: 1.05;
+      }
+
+      // 點擊時效果
+      &:active {
+        scale: 0.95;
+      }
     }
 
-    .answer-btn {
+    .cannot {
+      text-decoration: none;
+      padding: 0.1rem 0.63rem 0.1rem 0.63rem;
+      color: white;
+      width: 3.5rem;
+      background-color: #949494;
+      border: solid #575757 2px;
+      border-radius: 0.5rem;
+      &:hover {
+        cursor: default;
+      }
+}
+
+    .work {
+      text-decoration: none;
+      padding: 0.2rem 0.7rem;
+      margin-top: 0.1rem;
+      color: #ff6a00;
       width: 3rem;
+      background-color: #F8DC95;
+      border: solid #ff8400 2px;
+      border-radius: 0.5rem;
+
+      // 按鈕變絲滑
+      transition: 0.3s;
+
+      &:hover {
+        cursor: pointer;
+        scale: 1.05;
+      }
+
+      // 點擊時效果
+      &:active {
+        scale: 0.95;
+      }
     }
 
-    .update-btn {
-      width: 3rem;
+    // .update-btn {
+    //   width: 3rem;
 
-    }
+    // }
   }
 
   .pages-changer {

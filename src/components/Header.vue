@@ -14,13 +14,13 @@ export default {
     }
   },
   mounted() {
-    this.updateLocation(0)
+    // this.updateLocation(0)
   },
   methods: {
-    ...mapActions(indexStore, ['updateLocation'])
+    // ...mapActions(indexStore, ['updateLocation'])
   },
   computed: {
-    ...mapState(indexStore, ["location", "getLocation"])
+    // ...mapState(indexStore, ["location", "getLocation"])
   }
 }
 </script>
@@ -29,6 +29,7 @@ export default {
   <header>
 
       <RouterLink class="button" to="/"></RouterLink>
+      <!-- <p v-if="${  }">使用者</p> -->
       <!-- <MngSurveyBtnView :showManagerBtn="showManagerBtn" /> -->
   </header>
 </template>
@@ -45,6 +46,7 @@ header {
   // z-index: -1;
   background-color: #F8DC95;
   font-size: 1.5rem;
+  // position: fixed;  // 固定位置
 
   
   .button {

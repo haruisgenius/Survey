@@ -10,12 +10,14 @@ export default {
   data() {
     return {
       questionColumn: [
-        { key: "index", column: "#" }, { key: "question", column: "題目" },
+        // { key: "index", column: "#" }, 
+        { key: "question", column: "題目" },
         { key: "needs", column: "必填" }, { key: "multiple", column: "單複選" }
       ],
       questionData: [],  // 問題table
       showCheckBox: true, // 是否顯示勾選框
       showWatchBtn: false, // 是否顯示觀看統計
+      isCQuestion: true,  // 題目流水號
 
       // input
       surveyNumber: '',
@@ -30,7 +32,11 @@ export default {
       multipleError: '',  // 單複選錯誤
       optionError: '',    // 選項錯誤
 
-
+      //edit
+      // insideQuestion: null,
+      // insideNeeds: null,
+      // insideMultiple: null,
+      // insideOption: null
     }
   },
   methods: {
@@ -89,15 +95,10 @@ export default {
       // 存進list和sessionStorage
       this.questionData.push(question)
       sessionStorage.setItem('questionData', JSON.stringify(this.questionData))
-
+      
       // 拿index
-      let nowQuestion = sessionStorage.getItem('questionData')
-      console.log(nowQuestion)
-      // nowQuestion = nowQuestion.map(item => {
-      //   return {
+        // Object.assign(this.questionData, { 'index' : this.questionData.length })
 
-      //   }
-      // })
 
       // 重置input
       this.question = ''
@@ -155,19 +156,6 @@ export default {
     if(questionList) {
       let questionData = JSON.parse(questionList)
       console.log(questionData)
-      for(let i = 0; i < questionData.length; i++) {
-        let index = i + 1;
-        console.log(questionData[i])
-        this.question.assign()
-      }
-      // questionData.forEach(item =>  {
-        // let index = 0;
-        // console.log(item)
-        // return {
-        //   ...item,
-        //   'index' : index + 1
-        // }
-      // })
       this.questionData = questionData;
     }
   }
@@ -204,7 +192,7 @@ export default {
       </div>
     </div>
 
-    <TableView :columns="questionColumn" :showCheckBox="showCheckBox" :showWatchBtn="showWatchBtn" :data="questionData" />
+    <TableView :columns="questionColumn" :showCheckBox="showCheckBox" :showWatchBtn="showWatchBtn" :data="questionData" :isCQuestion="isCQuestion" />
 
     <div class="btn-area d-flex justify-content-space-between">
       <RouterLink to="/manager/create-survey" class="fcBtn qUp-btn">上一頁</RouterLink>

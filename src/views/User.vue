@@ -8,7 +8,7 @@ export default {
   data() {
     return {
       surveyColumn: [
-        { key: "serialNumber", column: "#" }, { key: "surveyName", column: "問卷" },
+        { key: "surveyName", column: "問卷" },
         { key: "surveyStatus", column: "狀態" }, { key: "startDate", column: "開始日期" },
         { key: "endDate", column: "結束日期" }
       ],
@@ -16,6 +16,7 @@ export default {
       // 是否顯示勾選框
       showCheckBox: false,
       showWatchBtn: true,   // 是否顯示觀看統計
+      isCQuestion: true,   // manager題目流水號
 
       searchText: '', // 搜尋關鍵字
       searchStartDate: '', //開始時間
@@ -81,7 +82,13 @@ export default {
       }
 
       return newData
-    }
+    },
+    createAnswer(item) {
+      this.item = item
+      // console.log(this.item)
+      // window.location.href = '/userAnswer'
+    },
+    
   },
   watch: {
     searchStartDate: function(newDate, oldDate) {
@@ -101,7 +108,7 @@ export default {
       let keyEndDate = ''
       let keyStatus = ''
       let newData = this.surveyData
-      console.log(newData)
+      // console.log(newData)
       newData.forEach(item => {
         if (item.surveyStatus == 1) {
           item.surveyStatus = '開放中'
@@ -168,7 +175,7 @@ export default {
     </div>
 
     <div class="table-area">
-      <TableView :columns="surveyColumn" :showCheckBox="showCheckBox" :showWatchBtn="showWatchBtn" :data="filteredData" />
+      <TableView :columns="surveyColumn" :showCheckBox="showCheckBox" :showWatchBtn="showWatchBtn" :data="filteredData" :isCQuestion="isCQuestion" @answer="createAnswer(item)" />
     </div>
 
   </div>
