@@ -27,6 +27,11 @@ const router = createRouter({
       path: '/userAnswer/:serialNumber?',  // ? > 可有可無
       name: 'user-answer',
       component: () => import('../views/UAnswer.vue')
+    },
+    {
+      path: '/watchAnswer/:serialNumber?',
+      name: 'watch-answer',
+      component: () => import('../views/WAnswer.vue')
     }
   ]
 })

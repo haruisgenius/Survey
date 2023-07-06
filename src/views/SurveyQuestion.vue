@@ -2,10 +2,12 @@
 import { mapActions } from "pinia"
 import indexStore from "../stores/indexStore";
 import TableView from "../components/Table.vue"
+import ModalView from "../components/Modal.vue"
 
 export default {
   components: {
-    TableView
+    TableView,
+    ModalView
   },
   data() {
     return {
@@ -87,17 +89,17 @@ export default {
       // 存進物件
       let question = {
         // 'index' : index + 1,
-        'qOption' : this.option,
-        'multiple' : this.multiple,
-        'needs' : this.needs,
-        'question' : this.question,
+        'qOption': this.option,
+        'multiple': this.multiple,
+        'needs': this.needs,
+        'question': this.question,
       }
       // 存進list和sessionStorage
       this.questionData.push(question)
       sessionStorage.setItem('questionData', JSON.stringify(this.questionData))
-      
+
       // 拿index
-        // Object.assign(this.questionData, { 'index' : this.questionData.length })
+      // Object.assign(this.questionData, { 'index' : this.questionData.length })
 
 
       // 重置input
@@ -115,45 +117,48 @@ export default {
         },
         body: JSON.stringify(body)
       })
-      .then(res => res.json())
-      .then(data => {
-        console.log(data.questionnaire.serialNumber)
-        let surveyNumber = data.questionnaire.serialNumber; // 撈新增當筆問卷之流水號(res內的questionnaire)
-        let questionData = JSON.parse(sessionStorage.getItem('questionData'))  // 拿回題目list, 轉成js語言(物件)
-        questionData = questionData.map(item => {
-          // 把問卷流水號塞進題目
-          return {
-            ...item, // ...表原本的東西
-            'surveyNumber' : surveyNumber,
-          }
-        })
-        console.log(questionData)
-        let questionBody = {
-          'questionList' : questionData
-        }
-        console.log(questionBody)
-        fetch("http://localhost:8080/create_question", {
-          method: "POST",
-          headers: {
-            "Content-Type" : "application/json"
-          },
-          body: JSON.stringify(questionBody)
-        })
         .then(res => res.json())
         .then(data => {
-          console.log(data)
+          console.log(data.questionnaire.serialNumber)
+          let surveyNumber = data.questionnaire.serialNumber; // 撈新增當筆問卷之流水號(res內的questionnaire)
+          let questionData = JSON.parse(sessionStorage.getItem('questionData'))  // 拿回題目list, 轉成js語言(物件)
+          questionData = questionData.map(item => {
+            // 把問卷流水號塞進題目
+            return {
+              ...item, // ...表原本的東西
+              'surveyNumber': surveyNumber,
+            }
+          })
+          console.log(questionData)
+          let questionBody = {
+            'questionList': questionData
+          }
+          console.log(questionBody)
+          fetch("http://localhost:8080/create_question", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify(questionBody)
+          })
+            .then(res => res.json())
+            .then(data => {
+              console.log(data)
+            })
         })
-      })
 
-      sessionStorage.removeItem('survey')
-      sessionStorage.removeItem('questionData')
-      window.location.href = '/manager'
+        setTimeout(function () {
+        sessionStorage.removeItem('survey')
+        sessionStorage.removeItem('questionData')
+        window.location.href = '/manager';
+      }, 1000);
+      // window.location.href = '/manager'
     }
   },
   mounted() {
     // this.updateLocation(2)
     let questionList = sessionStorage.getItem('questionData');
-    if(questionList) {
+    if (questionList) {
       let questionData = JSON.parse(questionList)
       console.log(questionData)
       this.questionData = questionData;
@@ -192,7 +197,8 @@ export default {
       </div>
     </div>
 
-    <TableView :columns="questionColumn" :showCheckBox="showCheckBox" :showWatchBtn="showWatchBtn" :data="questionData" :isCQuestion="isCQuestion" />
+    <TableView :columns="questionColumn" :showCheckBox="showCheckBox" :showWatchBtn="showWatchBtn" :data="questionData"
+      :isCQuestion="isCQuestion" />
 
     <div class="btn-area d-flex justify-content-space-between">
       <RouterLink to="/manager/create-survey" class="fcBtn qUp-btn">上一頁</RouterLink>

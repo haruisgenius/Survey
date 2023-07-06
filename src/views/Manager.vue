@@ -14,6 +14,8 @@ export default {
       ],
       surveyData: [], // 資料內容
       showCheckBox: true, // 是否顯示勾選框
+      showResBox: false,   // 作答
+      showWatchAnsBtn: false,  // 詳細作答
       showWatchBtn: true, // 是否顯示觀看統計
       isCQuestion: false,  // 題目流水號
 
@@ -166,7 +168,7 @@ export default {
     </div>
 
     <div class="table-area">
-      <TableView :columns="surveyColumn" :showCheckBox="showCheckBox" :data="filteredData" :showWatchBtn="showWatchBtn" />
+      <TableView :columns="surveyColumn" :showCheckBox="showCheckBox" :data="filteredData" :showWatchBtn="showWatchBtn" :showResBox="showResBox" :showWatchAnsBtn="showWatchAnsBtn" />
     </div>
 
   </div>

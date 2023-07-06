@@ -15,13 +15,15 @@ export default {
       surveyData: [], // 表格內容
       // 是否顯示勾選框
       showCheckBox: false,
+      showResBox: true,   // 作答
+      showWatchAnsBtn: false,  // 詳細作答
       showWatchBtn: true,   // 是否顯示觀看統計
       isCQuestion: true,   // manager題目流水號
 
       searchText: '', // 搜尋關鍵字
       searchStartDate: '', //開始時間
       searchEndDate: '',    //結束時間
-      searchStatus:''  // 狀態搜尋
+      searchStatus: ''  // 狀態搜尋
     }
   },
   mounted() {
@@ -42,8 +44,8 @@ export default {
     },
     changeSurveyStatus() {
       fetch("http://localhost:8080/change_survey_status")
-      .then(res => res.json())
-      .then(data => this.surveyData = data.questionnaireList.reverse())
+        .then(res => res.json())
+        .then(data => this.surveyData = data.questionnaireList.reverse())
     },
     updatefileredData() {
       let keyword = ''
@@ -77,7 +79,7 @@ export default {
       }
       if (this.searchStatus) {
         keyStatus = this.searchStatus
-        newData = newData.filter(item => 
+        newData = newData.filter(item =>
           item.surveyStatus.includes(keyStatus))
       }
 
@@ -88,16 +90,16 @@ export default {
       // console.log(this.item)
       // window.location.href = '/userAnswer'
     },
-    
+
   },
   watch: {
-    searchStartDate: function(newDate, oldDate) {
+    searchStartDate: function (newDate, oldDate) {
       this.updatefileredData();
     },
-    searchEndDate: function(newDate, oldDate) {
+    searchEndDate: function (newDate, oldDate) {
       this.updatefileredData();
     },
-    searchStatus: function(newStatus, oldStatus) {
+    searchStatus: function (newStatus, oldStatus) {
       this.updatefileredData();
     }
   },
@@ -135,7 +137,7 @@ export default {
       }
       if (this.searchStatus) {
         keyStatus = this.searchStatus
-        newData = newData.filter(item => 
+        newData = newData.filter(item =>
           item.surveyStatus.includes(keyStatus))
       }
 
@@ -175,7 +177,9 @@ export default {
     </div>
 
     <div class="table-area">
-      <TableView :columns="surveyColumn" :showCheckBox="showCheckBox" :showWatchBtn="showWatchBtn" :data="filteredData" :isCQuestion="isCQuestion" @answer="createAnswer(item)" />
+      <TableView :columns="surveyColumn" :showCheckBox="showCheckBox" :showWatchBtn="showWatchBtn" :data="filteredData"
+        :isCQuestion="isCQuestion" :showResBox="showResBox" :showWatchAnsBtn="showWatchAnsBtn"
+        @answer="createAnswer(item)" />
     </div>
 
   </div>

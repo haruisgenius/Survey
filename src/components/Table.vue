@@ -19,6 +19,8 @@ export default {
 
     // 顯示勾選框
     showCheckBox: false,
+    showResBox: false,  // 觀看作答
+    showWatchAnsBtn: false,  // 詳細作答
     showWatchBtn: false,  // 觀看統計
     isCQuestion: false,   // 題目流水號
   },
@@ -113,8 +115,9 @@ export default {
             </th>
             <th v-if="isCQuestion">#</th>
             <th v-for="column in columns">{{ column.column }}</th>
-            <th v-if="!showCheckBox">問卷作答</th>
-            <th v-if="showWatchBtn">觀看統計</th>
+            <th v-if="showResBox">問卷作答</th>
+            <th v-if="showWatchBtn">觀看</th>
+            <th v-if="showWatchAnsBtn">觀看</th>
             <th v-if="showCheckBox">修改</th>
           </tr>
         </thead>
@@ -130,14 +133,19 @@ export default {
             <!-- 迴圈印出該頁對應標題欄位之內容 -->
             <td v-if="isCQuestion">{{ index + 1 }}</td>  <!-- 序號 -->
             <td v-for="column in columns">{{ item[column.key] }}</td>
-            <td v-if="!showCheckBox" calss="d-flex justify-content-center">
+            <td v-if="showResBox" calss="d-flex justify-content-center">
               <!--               到``中間的網址 取此行表格資料之問卷流水號 -->      <!-- 不用@click="createAnswer(item)" -->             
               <RouterLink :to="`/userAnswer/${ item.serialNumber }`" class="work text-center" v-if="item.surveyStatus == '開放中'">作答</RouterLink>
               <div class="cannot text-center" v-else>作答</div>
             </td>
+            <!-- 觀看答案 -->
             <td v-if="showWatchBtn" calss="d-flex justify-content-center">
               <div class="cannot btn text-center" v-if="item.surveyStatus == '未開放'">觀看</div>
-              <RouterLink to="/" type="button" class="work-btn text-center" v-else>觀看</RouterLink>
+              <RouterLink :to="`/watchAnswer/${ item.serialNumber }`" type="button" class="work-btn text-center" v-else>觀看</RouterLink>
+            </td>
+            <!-- 觀看詳細作答 -->
+            <td v-if="showWatchAnsBtn" calss="d-flex justify-content-center">
+              <RouterLink :to="`/watchAnswer/${ item.serialNumber }`" type="button" class="work-btn text-center">觀看</RouterLink>
             </td>
             <td v-if="showCheckBox" calss="d-flex justify-content-center">
               <RouterLink to="/" type="button" class="work-btn text-center" @click="editItem(item)">修改</RouterLink>
