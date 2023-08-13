@@ -17,9 +17,14 @@ export default {
         { key: "needs", column: "必填" }, { key: "multiple", column: "單複選" }
       ],
       questionData: [],  // 問題table
-      showCheckBox: true, // 是否顯示勾選框
+      showUpdateS: false, // 是否顯示修改問卷
+      showUpdateQ: true, // 是否顯示修改題目
       showWatchBtn: false, // 是否顯示觀看統計
       isCQuestion: true,  // 題目流水號
+
+      // table回傳的資料
+      item: {},
+      qIndex: '',
 
       // input
       surveyNumber: '',
@@ -28,17 +33,13 @@ export default {
       multiple: '',      // 單複選
       option: '',        // 選項
       index: 0,          // table自動產生編號index
+      isAddQShow: true,  // 是否顯示新增單題目
+      isUpdateQShow: false, // 是否顯示修改題目
 
       // error
-      quesitonError: '',  // 題目錯誤
+      questionError: '',  // 題目錯誤
       multipleError: '',  // 單複選錯誤
       optionError: '',    // 選項錯誤
-
-      //edit
-      // insideQuestion: null,
-      // insideNeeds: null,
-      // insideMultiple: null,
-      // insideOption: null
     }
   },
   methods: {
@@ -47,7 +48,7 @@ export default {
       let oneQuestion = {};      // 一個問題物件
       // 題目
       if (!this.question) {
-        this.quesitonError = "請輸入題目"
+        this.questionError = "請輸入題目"
       } else {
         this.quesitonError = ''
       }
@@ -144,15 +145,99 @@ export default {
             .then(res => res.json())
             .then(data => {
               console.log(data)
+              
+              if(data.message != 'success') {
+                this.questionError = '選項過長，請修改'
+              }else {
+                this.questionError = ''
+              }
+              if(this.questionError) {
+                return this.questionError
+              }else {
+                  setTimeout(function () {
+                  sessionStorage.removeItem('survey')
+                  sessionStorage.removeItem('questionData')
+                  window.location.href = '/manager';
+                }, 2000);
+              }
             })
         })
-
-        setTimeout(function () {
-        sessionStorage.removeItem('survey')
-        sessionStorage.removeItem('questionData')
-        window.location.href = '/manager';
-      }, 1000);
       // window.location.href = '/manager'
+    },
+    updateQuestion(item, qIndex){
+      this.item = item
+      this.qIndex = qIndex
+      // console.log(item.question)
+      this.question = item.question
+      this.needs = item.needs
+      this.multiple = item.multiple
+      this.option = item.qOption
+      this.isAddQShow = false  // 新增 Btn隱藏
+      this.isUpdateQShow = true  // 修改Btn顯示
+    },
+    updateOldQ() {
+      if (!this.question) {
+        this.questionError = "請輸入題目"
+      } else {
+        this.questionError = ''
+      }
+
+      // 必填
+      if (this.needs == true) {
+        this.needs = this.needs;
+      } else {
+        this.needs = false;
+      }
+      // console.log(this.needs)
+      // 單複選
+      if (!this.multiple) {
+        this.multipleError = '請選擇單複選';
+      } else {
+        this.multipleError = ''
+      }
+      if (this.multiple == true) {
+        this.multiple = this.multiple;
+      } else {
+        this.multiple = this.multiple;
+      }
+      // console.log(this.multiple)
+
+      // 選項
+      if (!this.option) {
+        this.optionError = '請輸入選項'
+      } else {
+        this.optionError = ''
+      }
+      // 錯誤訊息
+      if (this.questionError) {
+        return this.questionError;
+      } else if (this.optionError) {
+        return this.optionError
+      } else if (this.multipleError) {
+        return this.multipleError
+      }
+      // 存進物件
+      let question = {
+        // 'index' : index + 1,
+        'qOption': this.option,
+        'multiple': this.multiple,
+        'needs': this.needs,
+        'question': this.question,
+      }
+      // 存進此位置的sessionStorage
+      //                                  刪除的元素個數
+      this.questionData.splice(this.qIndex, 1, question)
+      // this.questionData.push(this, 0, question)
+      console.log("修改的Session", question)
+      // this.item = question
+      sessionStorage.setItem('questionData', JSON.stringify(this.questionData))
+      // 重置input
+      this.question = ''
+      this.needs = ''
+      this.multiple = ''
+      this.option = ''
+      this.isAddQShow = true  // 新增 Btn顯示
+      this.isUpdateQShow = false  // 修改Btn隱藏
     }
   },
   mounted() {
@@ -173,12 +258,12 @@ export default {
       <div class="question-input mb-2">
         <label for="question">題目</label>
         <input type="text" name="question" id="question" class="ms-2" v-model="question">
-        <label for="question" class="error ms-2">{{ quesitonError }}</label>
+        <label for="question" class="error ms-2">{{ questionError }}</label>
       </div>
 
       <input type="checkbox" name="needs" id="needs" value="true" v-model="needs">
       <label for="needs">必填</label>
-      <select name="multiple" id="multiple" class="ms-3" v-model="multiple">
+      <select name="multiple" id="multiple" class="ms-3" v-model="multiple" title="單選為false, 複選為true">
         <!-- <option value="" disabled selected>單複選</option> -->
         <option value="false">單選</option>
         <option value="true">複選</option>
@@ -192,13 +277,14 @@ export default {
           <label for="option" class="ms-2">(多個選項以;做分隔)</label>
           <label for="option" class="error ms-2">{{ optionError }}</label>
         </div>
-        <div class="fcBtn qAdd-btn" @click="addQuestion">新增</div>
+        <div class="fcBtn qAdd-btn" @click="addQuestion" v-if="isAddQShow" >新增</div>
+        <div class="fcBtn qAdd-btn" @click="updateOldQ" v-if="isUpdateQShow" >修改</div>
 
       </div>
     </div>
 
-    <TableView :columns="questionColumn" :showCheckBox="showCheckBox" :showWatchBtn="showWatchBtn" :data="questionData"
-      :isCQuestion="isCQuestion" />
+    <TableView :columns="questionColumn" :showUpdateS="showUpdateS" :showUpdateQ="showUpdateQ" :showWatchBtn="showWatchBtn" :data="questionData"
+      :isCQuestion="isCQuestion" @updateQ="updateQuestion" />
 
     <div class="btn-area d-flex justify-content-space-between">
       <RouterLink to="/manager/create-survey" class="fcBtn qUp-btn">上一頁</RouterLink>

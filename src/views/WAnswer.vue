@@ -11,12 +11,14 @@ export default {
         { key: "answerTime", column: "回答時間" }],
       resData: [], // 表格內容
       survey: [], // 問卷內容
-      // 是否顯示勾選框
-      showCheckBox: false,
+      // 是否顯示修改問卷
+      showUpdateS: false,
+      showUpdateQ: false, // 修改題目
       showResBox: false,   // 作答
-      showWatchAnsBtn: true,  // 觀看詳細作答
-      showWatchBtn: false,   // 是否顯示觀看統計
-      isCQuestion: true,   // manager題目流水號
+      showCountBtn: false,   // 是否顯示觀看統計 UM
+      showAllResBtn: false,  // 作答一覽M
+      showWatchAnsBtn: true,  // 詳細答案內容M
+      isCQuestion: true,   // 前端流水號
     }
   },
   mounted() {
@@ -69,11 +71,11 @@ export default {
 <template>
   <div class="w-result-warp">
     <div class="back-btn">
-      <RouterLink to="/" class="cancelBtn">返回</RouterLink>
+      <RouterLink to="/manager" class="cancelBtn">返回</RouterLink>
       <h2 class="mt-1">{{ this.survey.surveyName }}</h2>
     </div>
-    <TableView :columns="resColumn" :showCheckBox="showCheckBox" :showWatchBtn="showWatchBtn" :data="this.resData"
-      :showResBox="showResBox" :isCQuestion="isCQuestion" :showWatchAnsBtn="showWatchAnsBtn" />
+    <TableView :columns="resColumn" :showUpdateS="showUpdateS" :showUpdateQ="showUpdateQ" :showWatchBtn="showWatchBtn" :data="this.resData"
+      :showResBox="showResBox" :isCQuestion="isCQuestion" :showWatchAnsBtn="showWatchAnsBtn" :showAllResBtn="showAllResBtn" :showCountBtn="showCountBtn" />
   </div>
 </template>
 

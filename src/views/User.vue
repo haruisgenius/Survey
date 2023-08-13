@@ -13,11 +13,13 @@ export default {
         { key: "endDate", column: "結束日期" }
       ],
       surveyData: [], // 表格內容
-      // 是否顯示勾選框
-      showCheckBox: false,
+      // 是否顯示修改問卷
+      showUpdateS: false,
+      showUpdateQ: false,  // 顯示修改題目
       showResBox: true,   // 作答
-      showWatchAnsBtn: false,  // 詳細作答
-      showWatchBtn: true,   // 是否顯示觀看統計
+      showWatchAnsBtn: false,  // 詳細答案內容 M才能看
+      showCountBtn: true,   // 是否顯示觀看統計 U也可以看
+      showAllResBtn: false,   // 全部作答M
       isCQuestion: true,   // manager題目流水號
 
       searchText: '', // 搜尋關鍵字
@@ -151,9 +153,9 @@ export default {
   <div class="user-warp">
     <h2 class="">問卷一覽</h2>
     <div class="sreach-area">
-      <div class="input-area">
+      <div class="input-area d-flex">
         <div class="another-input d-flex">
-          <input type="text" placeholder="請輸入關鍵字" @blur="" class="text-input mb-2" v-model="searchText">
+          <input type="text" placeholder="請輸入關鍵字" @blur="" class="text-input" v-model="searchText">
           <!-- <div type="button" class="button text-center ms-2" @click="keywordSreach">關鍵字搜尋</div> -->
         </div>
 
@@ -177,8 +179,8 @@ export default {
     </div>
 
     <div class="table-area">
-      <TableView :columns="surveyColumn" :showCheckBox="showCheckBox" :showWatchBtn="showWatchBtn" :data="filteredData"
-        :isCQuestion="isCQuestion" :showResBox="showResBox" :showWatchAnsBtn="showWatchAnsBtn"
+      <TableView :columns="surveyColumn" :showUpdateS="showUpdateS" :showUpdateQ="showUpdateQ" :showAllResBtn="showAllResBtn" :data="filteredData"
+        :isCQuestion="isCQuestion" :showResBox="showResBox" :showWatchAnsBtn="showWatchAnsBtn" :showCountBtn="showCountBtn"
         @answer="createAnswer(item)" />
     </div>
 
@@ -200,13 +202,18 @@ export default {
     justify-content: start;
 
     .input-area {
-      width: 50%;
+      // width: 50%;
 
       .text-input {
         border: 1px solid black;
         border-radius: 0.5rem;
         padding-left: 0.5rem;
         outline: none;
+      }
+
+      .date-input {
+        height: 2rem;
+        margin-left: 1rem;
       }
     }
 

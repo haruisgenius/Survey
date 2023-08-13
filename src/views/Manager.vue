@@ -13,11 +13,13 @@ export default {
         { key: "endDate", column: "結束日期" }
       ],
       surveyData: [], // 資料內容
-      showCheckBox: true, // 是否顯示勾選框
-      showResBox: false,   // 作答
-      showWatchAnsBtn: false,  // 詳細作答
-      showWatchBtn: true, // 是否顯示觀看統計
-      isCQuestion: false,  // 題目流水號
+      showUpdateS: true, // 是否顯示 修改問卷
+      showUpdateQ: false, // 是否顯示 修改題目
+      showResBox: false,   // User作答
+      showCountBtn: true, // 觀看統計UM
+      showAllResBtn: true, // 作答一覽M
+      showWatchAnsBtn: false,  // 詳細作答內容M
+      isCQuestion: false,  // 前端流水號
 
       searchText: '', // 搜尋關鍵字
       searchStartDate: '', // 開始時間
@@ -56,23 +58,23 @@ export default {
         }
       })
       if (this.searchText) { // this.searchText上面的data變數
-        keyword = this.searchText.toLocaleLowerCase()  // keyword此方法內的變數
-        newData.filter(item =>
-          item.surveyName.toLocaleLowerCase.includes(keyword))
+        keyword = this.searchText.toLowerCase()  // keyword此方法內的變數
+        newData = newData.filter(item =>
+          item.surveyName.toLowerCase().includes(keyword))
       }
       if (this.searchStartDate) {
         keyStartDate = this.searchStartDate
-        newData.filter(item =>
+        newData = newData.filter(item =>
           item.startDate.includes(keyStartDate))
       }
       if (this.searchEndDate) {
         keyEndDate = this.searchEndDate
-        newData.filter(item =>
+        newData = newData.filter(item =>
           item.endDate.includes(keyEndDate))
       }
       if (this.searchStatus) {
         keyStatus = this.searchStatus
-        newData.filter(item =>
+        newData = newData.filter(item =>
           item.surveyStatus.includes(keyStatus))
       }
 
@@ -107,23 +109,23 @@ export default {
         }
       })
       if (this.searchText) { // this.searchText上面的data變數
-        keyword = this.searchText.toLocaleLowerCase()  // keyword此方法內的變數
-        newData.filter(item =>
-          item.surveyName.toLocaleLowerCase.includes(keyword))
+        keyword = this.searchText.toLowerCase()  // keyword此方法內的變數
+        newData = newData.filter(item =>
+          item.surveyName.toLowerCase().includes(keyword))
       }
       if (this.searchStartDate) {
         keyStartDate = this.searchStartDate
-        newData.filter(item =>
+        newData = newData.filter(item =>
           item.startDate.includes(keyStartDate))
       }
       if (this.searchEndDate) {
         keyEndDate = this.searchEndDate
-        newData.filter(item =>
+        newData = newData.filter(item =>
           item.endDate.includes(keyEndDate))
       }
       if (this.searchStatus) {
         keyStatus = this.searchStatus
-        newData.filter(item =>
+        newData = newData.filter(item =>
           item.surveyStatus.includes(keyStatus))
       }
 
@@ -137,9 +139,9 @@ export default {
   <div class="manager-warp">
     <h2 class="">問卷一覽</h2>
     <div class="sreach-area d-flex">
-      <div class="input-area">
+      <div class="input-area d-flex">
         <div class="another-input d-flex">
-          <input type="text" placeholder="請輸入關鍵字" class="text-input mb-2" v-model="searchText">
+          <input type="text" placeholder="請輸入關鍵字" class="text-input" v-model="searchText">
           <!-- <div type="button" class="button text-center ms-2">關鍵字搜尋</div> -->
         </div>
 
@@ -147,7 +149,7 @@ export default {
           <input type="date" v-model="searchStartDate"><span class="mx-2">~</span>
           <input type="date" v-model="searchEndDate">
 
-          <select name="statusSreach" id="" class="ms-2">
+          <select name="statusSreach" id="" class="ms-2" v-model="searchStatus">
             <option value="" disabled selected>狀態查詢</option>
             <option value="">全部</option>
             <option value="開放中">開放中</option>
@@ -168,7 +170,7 @@ export default {
     </div>
 
     <div class="table-area">
-      <TableView :columns="surveyColumn" :showCheckBox="showCheckBox" :data="filteredData" :showWatchBtn="showWatchBtn" :showResBox="showResBox" :showWatchAnsBtn="showWatchAnsBtn" />
+      <TableView :columns="surveyColumn" :showUpdateS="showUpdateS" :showUpdateQ="showUpdateQ" :data="filteredData" :showAllResBtn="showAllResBtn" :showResBox="showResBox" :showWatchAnsBtn="showWatchAnsBtn" :showCountBtn="showCountBtn" />
     </div>
 
   </div>
@@ -192,8 +194,13 @@ export default {
       outline: none;
     }
 
+    .date-input {
+        height: 2rem;
+        margin-left: 1rem;
+      }
+
     .fc-btn {
-      align-items: end;
+      align-items: center;
     }
   }
 

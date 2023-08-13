@@ -32,6 +32,16 @@ const router = createRouter({
       path: '/watchAnswer/:serialNumber?',
       name: 'watch-answer',
       component: () => import('../views/WAnswer.vue')
+    },
+    {
+      path: '/answerDetail/:serialNumber?',
+      name: 'answer-detail',
+      component: () => import('../views/AnsDetail.vue')
+    },
+    {
+      path: '/watchCount/:serialNumber?',
+      name: 'watch-count',
+      component: () => import('../views/WCount.vue')
     }
   ]
 })
