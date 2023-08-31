@@ -81,6 +81,12 @@ public class QuestionnaireTest {
 			
 		}
 	}
+	
+	@Test
+	public void findSurveyTest() {
+		QuestionnaireResponse res1 = questionnaireService.findSurvey(1);
+		System.out.println(res1.getMessage());
+	}
 
 	
 }

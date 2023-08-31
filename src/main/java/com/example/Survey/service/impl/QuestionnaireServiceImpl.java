@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import com.example.Survey.constants.RtnCode;
 import com.example.Survey.entity.Questionnaire;
 import com.example.Survey.respository.QuestionnaireDao;
 import com.example.Survey.service.ifs.QuestionnaireService;
@@ -20,33 +21,33 @@ public class QuestionnaireServiceImpl implements QuestionnaireService {
 	@Autowired
 	private QuestionnaireDao questionnaireDao;
 
-//	·s¼W°İ¨÷
+//	æ–°å¢å•å·
 	@Override
 	public QuestionnaireResponse createSurvey(String surveyName, String surveyCaption, LocalDate startDate,
 			LocalDate endDate) {
-//		¨¾§b: ¥¼¿é¤J°İ¨÷¼ĞÃD
+//		é˜²å‘†: æœªè¼¸å…¥å•å·æ¨™é¡Œ
 		if (!StringUtils.hasText(surveyName)) {
-			return new QuestionnaireResponse("°İ¨÷¼ĞÃD¬°ªÅ");
+			return new QuestionnaireResponse(RtnCode.CANNOT_EMPTY.getMessage());
 		}
 
-//		°İ¨÷»¡©ú¥i¬°ªÅ
+//		å•å·èªªæ˜å¯ç‚ºç©º
 
-//		¨¾§b: ¥¼¿é¤J¶}©l®É¶¡, «h¹w³]¬°·í¤é
+//		é˜²å‘†: æœªè¼¸å…¥é–‹å§‹æ™‚é–“, å‰‡é è¨­ç‚ºç•¶æ—¥
 		if (startDate == null || startDate.toString().isBlank()) {
 			startDate = LocalDate.now();
 		}
 
-//		¨¾§b: ¥¼¿é¤Jµ²§ô®É¶¡, ¹w³]¬°¶}©l®É¶¡+7¤é
+//		é˜²å‘†: æœªè¼¸å…¥çµæŸæ™‚é–“, é è¨­ç‚ºé–‹å§‹æ™‚é–“+7æ—¥
 		if (endDate == null || endDate.toString().isBlank()) {
 			endDate = startDate.plusDays(7);
 		}
 
-//		¨¾§b: ¶}©l®É¶¡¤£¥i¦­©ó·í¤é, µ²§ô®É¶¡¤£¥i¤p(¦­)©ó¶}©l®É¶¡
+//		é˜²å‘†: é–‹å§‹æ™‚é–“ä¸å¯æ—©æ–¼ç•¶æ—¥, çµæŸæ™‚é–“ä¸å¯å°(æ—©)æ–¼é–‹å§‹æ™‚é–“
 		if (startDate.isBefore(LocalDate.now()) || endDate.isBefore(startDate)) {
-			return new QuestionnaireResponse("¶}©l©Îµ²§ô®É¶¡¿ù»~");
+			return new QuestionnaireResponse(RtnCode.INCORRECT.getMessage());
 		}
 
-//		°İ¨÷ª¬ºA: ¶}©l®É¶¡(0=¥¼¶}©ñ, 1=¶}©ñ¤¤, 2=¤wµ²§ô)
+//		å•å·ç‹€æ…‹: é–‹å§‹æ™‚é–“(0=æœªé–‹æ”¾, 1=é–‹æ”¾ä¸­, 2=å·²çµæŸ)
 		int status = 0;
 		if (startDate.equals(LocalDate.now())) {
 			status = 1;
@@ -54,50 +55,50 @@ public class QuestionnaireServiceImpl implements QuestionnaireService {
 
 		return new QuestionnaireResponse(
 				questionnaireDao.save(new Questionnaire(surveyName, surveyCaption, status, startDate, endDate)),
-				"·s¼W°İ¨÷¦¨¥\");
+				RtnCode.SUCCESSFUL.getMessage());
 	}
 
-//	½s¿è°İ¨÷
+//	ç·¨è¼¯å•å·
 	@Override
 	public QuestionnaireResponse updateSurvey(Integer serialNumber, String surveyName, String surveyCaption,
 			LocalDate startDate, LocalDate endDate) {
-//		¼´¥X°İ¨÷
+//		æ’ˆå‡ºå•å·
 		Optional<Questionnaire> survey = questionnaireDao.findById(serialNumber);
-//		¨¾§b: ­Y°İ¨÷¤£¦s¦b
+//		é˜²å‘†: è‹¥å•å·ä¸å­˜åœ¨
 		if (!survey.isPresent()) {
-			return new QuestionnaireResponse("µL¦¹°İ¨÷");
+			return new QuestionnaireResponse(RtnCode.NOT_FOUND.getMessage());
 		}
-//		¨¾§b: °İ¨÷¥i§_½s¿è(ª¬ºA¬°2=¤wµ²§ô, 1=¶}©ñ¤¤ «h¤£¥i½s¿è)
+//		é˜²å‘†: å•å·å¯å¦ç·¨è¼¯(ç‹€æ…‹ç‚º2=å·²çµæŸ, 1=é–‹æ”¾ä¸­ å‰‡ä¸å¯ç·¨è¼¯)
 		if (survey.get().getSurveyStatus() == 2 || survey.get().getSurveyStatus() == 1) {
-			return new QuestionnaireResponse("°İ¨÷µLªk½s¿è");
+			return new QuestionnaireResponse(RtnCode.INCORRECT.getMessage());
 		}
 
-//		¨¾§b: ¥¼¿é¤J°İ¨÷¼ĞÃD
+//		é˜²å‘†: æœªè¼¸å…¥å•å·æ¨™é¡Œ
 		if (!StringUtils.hasText(surveyName)) {
-			return new QuestionnaireResponse("°İ¨÷¼ĞÃD¬°ªÅ");
+			return new QuestionnaireResponse(RtnCode.CANNOT_EMPTY.getMessage());
 		}
-//		­Y¥¼¿é¤J°İ¨÷»¡©ú, «h¬°ªÅ¦r¦ê
+//		è‹¥æœªè¼¸å…¥å•å·èªªæ˜, å‰‡ç‚ºç©ºå­—ä¸²
 		if (!StringUtils.hasText(surveyCaption)) {
 			surveyCaption = "";
 		}
-//		¨¾§b: ¥¼¿é¤J¶}©l®É¶¡, «h¹w³]¬°·í¤é
+//		é˜²å‘†: æœªè¼¸å…¥é–‹å§‹æ™‚é–“, å‰‡é è¨­ç‚ºç•¶æ—¥
 		if (startDate == null || startDate.toString().isBlank()) {
 			startDate = LocalDate.now();
 		}
 
-//«eºİ---------------
-//		¨¾§b: ¥¼¿é¤Jµ²§ô®É¶¡, ¹w³]¬°¶}©l®É¶¡+7¤é
+//å‰ç«¯---------------
+//		é˜²å‘†: æœªè¼¸å…¥çµæŸæ™‚é–“, é è¨­ç‚ºé–‹å§‹æ™‚é–“+7æ—¥
 		if (endDate == null || endDate.toString().isBlank()) {
 			endDate = startDate.plusDays(7);
 		}
 
-//		¨¾§b: ¶}©l®É¶¡¤£¥i¦­©ó·í¤é, µ²§ô®É¶¡¤£¥i¤p(¦­)©ó¶}©l®É¶¡
+//		é˜²å‘†: é–‹å§‹æ™‚é–“ä¸å¯æ—©æ–¼ç•¶æ—¥, çµæŸæ™‚é–“ä¸å¯å°(æ—©)æ–¼é–‹å§‹æ™‚é–“
 		if (startDate.isBefore(LocalDate.now()) || endDate.isBefore(startDate)) {
-			return new QuestionnaireResponse("¶}©l©Îµ²§ô®É¶¡¿ù»~");
+			return new QuestionnaireResponse(RtnCode.INCORRECT.getMessage());
 		}
-//«eºİ---------------
+//å‰ç«¯---------------
 
-//		°İ¨÷ª¬ºA: ¶}©l®É¶¡(0=¥¼¶}©ñ, 1=¶}©ñ¤¤, 2=¤wµ²§ô)
+//		å•å·ç‹€æ…‹: é–‹å§‹æ™‚é–“(0=æœªé–‹æ”¾, 1=é–‹æ”¾ä¸­, 2=å·²çµæŸ)
 		int status = 0;
 		if (startDate == LocalDate.now()) {
 			status = 1;
@@ -108,63 +109,73 @@ public class QuestionnaireServiceImpl implements QuestionnaireService {
 		survey.get().setSurveyStatus(status);
 		survey.get().setStartDate(startDate);
 		survey.get().setEndDate(endDate);
-		return new QuestionnaireResponse(questionnaireDao.save(survey.get()), "¦¨¥\");
+		return new QuestionnaireResponse(questionnaireDao.save(survey.get()), RtnCode.SUCCESSFUL.getMessage());
 	}
 
-//	­×§ï°İ¨÷ª¬ºA
+//	ä¿®æ”¹å•å·ç‹€æ…‹
 	@Override
 	public QuestionnaireResponse changeSurveyStatus() {
 		List<Questionnaire> allSurvey = questionnaireDao.findAll();
 		for(Questionnaire survey : allSurvey) {
-//			µ²§ô®É¶¡¤w¹L¡Aª¬ºA§ï2¤wµ²§ô
+//			çµæŸæ™‚é–“å·²éï¼Œç‹€æ…‹æ”¹2å·²çµæŸ
 			if(survey.getEndDate().isBefore(LocalDate.now())) {
 				survey.setSurveyStatus(2);
-//				¶}©l®É¶¡µ¥©ó¤µ¤Ñ¡Aª¬ºA§ï1¶}©l
+//				é–‹å§‹æ™‚é–“ç­‰æ–¼ä»Šå¤©ï¼Œç‹€æ…‹æ”¹1é–‹å§‹
 			}else if(survey.getStartDate().isEqual(LocalDate.now())) {
 				survey.setSurveyStatus(1);
 			}
 		}
 		
-		return new QuestionnaireResponse(questionnaireDao.saveAll(allSurvey), "¦¨¥\");
+		return new QuestionnaireResponse(questionnaireDao.saveAll(allSurvey), RtnCode.SUCCESSFUL.getMessage());
 	}
 
 
-//	§R°£°İ¨÷
+//	åˆªé™¤å•å·
 	@Override
 	public QuestionnaireResponse deleteSurvey(List<Integer> deleteSurveyList) {
-//		¸Ë­n§R°£ªº°İ¨÷list
+//		è£è¦åˆªé™¤çš„å•å·list
 		List<Questionnaire> allSurveyList = questionnaireDao.findAll();
-//		­n§R°£ªº°İ¨÷list
+//		è¦åˆªé™¤çš„å•å·list
 		List<Questionnaire> deleteList = new ArrayList<>();
 		for(Questionnaire survey : allSurveyList) {
-			// §PÂ_­Y¦¹°İ¨÷¤§¬y¤ô¸¹¦³¦breq¤º¡A¥[¤JdeleteList
+			// åˆ¤æ–·è‹¥æ­¤å•å·ä¹‹æµæ°´è™Ÿæœ‰åœ¨reqå…§ï¼ŒåŠ å…¥deleteList
 			if(deleteSurveyList.contains(survey.getSerialNumber())) {
 				deleteList.add(survey);
 			}
 		}
-//		¨¾§b: §PÂ_°İ¨÷¦s¦b
-		// §PÂ_deleteListªø«×»Preq¬O§_¬Û¦P¡A­Y§_¡A«hªí±ı§R°£°İ¨÷¤º§t¤£¦s¦b¤§°İ¨÷
+//		é˜²å‘†: åˆ¤æ–·å•å·å­˜åœ¨
+		// åˆ¤æ–·deleteListé•·åº¦èˆ‡reqæ˜¯å¦ç›¸åŒï¼Œè‹¥å¦ï¼Œå‰‡è¡¨æ¬²åˆªé™¤å•å·å…§å«ä¸å­˜åœ¨ä¹‹å•å·
 		if(deleteList.size() != deleteSurveyList.size()) {
-			return new QuestionnaireResponse("°İ¨÷¤£¦s¦b");
+			return new QuestionnaireResponse(RtnCode.NOT_FOUND.getMessage());
 		}
-//		¨¾§b: °İ¨÷ª¬ºA0=¥¼¶}©ñ ¤~¥i§R°£°İ¨÷
+//		é˜²å‘†: å•å·ç‹€æ…‹0=æœªé–‹æ”¾ æ‰å¯åˆªé™¤å•å·
 		for(Questionnaire deleteSurvey : deleteList) {
 			if(deleteSurvey.getSurveyStatus() != 0) {
-				return new QuestionnaireResponse("°İ¨÷µLªk§R°£");
+				return new QuestionnaireResponse(RtnCode.INCORRECT.getMessage());
 			}
 		}
 		
 		questionnaireDao.deleteAllById(deleteSurveyList);
-		return new QuestionnaireResponse("¦¨¥\");
+		return new QuestionnaireResponse(RtnCode.SUCCESSFUL.getMessage());
 	}
 
 	
-//	§ä©Ò¦³°İ¨÷
+//	æ‰¾æ‰€æœ‰å•å·
 	@Override
 	public QuestionnaireResponse findAllSurvey() {
 		List<Questionnaire> allSurvey = questionnaireDao.findAllByOrderBySerialNumberDesc();
-		return new QuestionnaireResponse(allSurvey, "¦¨¥\");
+		return new QuestionnaireResponse(allSurvey, RtnCode.SUCCESSFUL.getMessage());
 	}
+
+//	æ‰¾å•å·
+	@Override
+	public QuestionnaireResponse findSurvey(Integer serialNumber) {
+		Optional<Questionnaire> surveyOp = questionnaireDao.findById(serialNumber);
+		Questionnaire survey = surveyOp.get();
+		return new QuestionnaireResponse(survey, RtnCode.SUCCESSFUL.getMessage());
+	}
+
+	
 	
 //	
 	

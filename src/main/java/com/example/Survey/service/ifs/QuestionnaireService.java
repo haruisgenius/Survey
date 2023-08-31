@@ -7,22 +7,25 @@ import com.example.Survey.vo.QuestionnaireResponse;
 
 public interface QuestionnaireService {
 
-//	·s¼W°İ¨÷
+//	æ–°å¢å•å·
 	public QuestionnaireResponse createSurvey(String surveyName, String surveyCaption,
 			LocalDate startDate, LocalDate endDate);
 	
-//	½s¿è°İ¨÷
+//	ç·¨è¼¯å•å·
 	public QuestionnaireResponse updateSurvey(Integer serialNumber, String surveyName, String surveyCaption,
 			LocalDate startDate, LocalDate endDate);
 	
-//	­×§ï°İ¨÷ª¬ºA
+//	ä¿®æ”¹å•å·ç‹€æ…‹
 	public QuestionnaireResponse changeSurveyStatus();
 	
-//	§R°£°İ¨÷
+//	åˆªé™¤å•å·
 	public QuestionnaireResponse deleteSurvey(List<Integer> deleteSurveyList);
 	
-//	§ä©Ò¦³°İ¨÷
+//	æ‰¾æ‰€æœ‰å•å·
 	public QuestionnaireResponse findAllSurvey();
+	
+//	æ‰¾å•å·
+	public QuestionnaireResponse findSurvey(Integer serialNumber);
 	
 
 }

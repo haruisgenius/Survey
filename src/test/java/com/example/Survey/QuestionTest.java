@@ -9,10 +9,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import com.example.Survey.entity.Question;
+import com.example.Survey.entity.Questionnaire;
 import com.example.Survey.respository.QuestionDao;
 import com.example.Survey.respository.QuestionnaireDao;
 import com.example.Survey.service.ifs.QuestionService;
 import com.example.Survey.vo.QuestionResponse;
+import com.example.Survey.vo.QuestionnaireResponse;
 
 @SpringBootTest(classes = SurveyApplication.class)
 public class QuestionTest {
@@ -61,6 +63,20 @@ public class QuestionTest {
 		List<Integer> testInt = new ArrayList<>(Arrays.asList(1,2,3,4,5));
 		List<Question> surveyOptList = qDao.findBySurveyNumberAndQuestionNumberIn(99, testInt);
 		System.out.println(surveyOptList.size());
+	}
+	
+	@Test
+	public void findQuestionTest() {
+		QuestionResponse res1 = qService.findSurveyQuestion(1);
+		for(Question res : res1.getQuestionList()) {
+			System.out.println(res.getQuestion());
+			String[] optionStr = res.getqOption().toString().split(",");
+			for(String option : optionStr) {
+				System.out.println(option);
+				
+			}
+			
+		}
 	}
 
 }

@@ -7,12 +7,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import com.example.Survey.constants.RtnCode;
 import com.example.Survey.entity.Question;
 import com.example.Survey.entity.Questionnaire;
 import com.example.Survey.respository.QuestionDao;
 import com.example.Survey.respository.QuestionnaireDao;
 import com.example.Survey.service.ifs.QuestionService;
 import com.example.Survey.vo.QuestionResponse;
+import com.example.Survey.vo.QuestionnaireResponse;
 
 @Service
 public class QuestionServiceImpl implements QuestionService {
@@ -23,7 +25,7 @@ public class QuestionServiceImpl implements QuestionService {
 	@Autowired
 	private QuestionnaireDao questionnaireDao;
 
-//	·s¼WÃD¥Ø
+//	æ–°å¢é¡Œç›®
 	@Override
 	public QuestionResponse createQuestion(List<Question> questionList) {
 		List<Questionnaire> allQuestionnaire = questionnaireDao.findAll();
@@ -32,84 +34,93 @@ public class QuestionServiceImpl implements QuestionService {
 			allSurveyNumber.add(questionnaire.getSerialNumber());
 		}
 		for (int i = 0; i < questionList.size(); i++) {
-//			¨¾§b: §PÂ_¬O§_¦³¿é¤J°İ¨÷½s¸¹
+//			é˜²å‘†: åˆ¤æ–·æ˜¯å¦æœ‰è¼¸å…¥å•å·ç·¨è™Ÿ
 			if (questionList.get(i).getSurveyNumber() == 0) {
-				return new QuestionResponse("½Ğ¿é¤J°İ¨÷½s¸¹");
+				return new QuestionResponse(RtnCode.CANNOT_EMPTY.getMessage());
 			}
-//			¨¾§b: §PÂ_°İ¨÷¬O§_¦s¦b
+//			é˜²å‘†: åˆ¤æ–·å•å·æ˜¯å¦å­˜åœ¨
 			if (!allSurveyNumber.contains(questionList.get(i).getSurveyNumber())) {
-				return new QuestionResponse("µL¦¹°İ¨÷");
+				return new QuestionResponse(RtnCode.NOT_FOUND.getMessage());
 			}
-//			¨¾§b: °İÃD¤£¥i¬°ªÅ
+//			é˜²å‘†: å•é¡Œä¸å¯ç‚ºç©º
 			if (!StringUtils.hasText(questionList.get(i).getQuestion())) {
-				return new QuestionResponse("½Ğ¿é¤JÃD¥Ø");
+				return new QuestionResponse(RtnCode.CANNOT_EMPTY.getMessage());
 			}
-//			¨¾§b: ­Y¥¼¿é¤Jneeds«h¥¬ªL­È¬°false > «D¥²¶ñ
+//			é˜²å‘†: è‹¥æœªè¼¸å…¥needså‰‡å¸ƒæ—å€¼ç‚ºfalse > éå¿…å¡«
 			if (questionList.get(i).getNeeds() == null) {
 				questionList.get(i).setNeeds(false);
 				;
 			}
-//			¨¾§b: ­Y¥¼¿é¤Jmultiple«h¥¬ªL­È¬°false > ³æ¿ï
+//			é˜²å‘†: è‹¥æœªè¼¸å…¥multipleå‰‡å¸ƒæ—å€¼ç‚ºfalse > å–®é¸
 			if (questionList.get(i).getMultiple() == null) {
 				questionList.get(i).setMultiple(false);
 			}
-//			¨¾§b: ¿ï¶µ¤£¥i¬°ªÅ
+//			é˜²å‘†: é¸é …ä¸å¯ç‚ºç©º
 			if (!StringUtils.hasText(questionList.get(i).getqOption())) {
-				return new QuestionResponse("½Ğ¿é¤J¿ï¶µ");
+				return new QuestionResponse(RtnCode.CANNOT_EMPTY.getMessage());
 			}
 
 		}
 
-		return new QuestionResponse(questionDao.saveAll(questionList), "·s¼W°İ¨÷¦¨¥\");
+		return new QuestionResponse(questionDao.saveAll(questionList), RtnCode.SUCCESSFUL.getMessage());
 	}
 
-//	½s¿èÃD¥Ø
+//	ç·¨è¼¯é¡Œç›®
 	@Override
 	public QuestionResponse updateQuestion(int surveyNumber, List<Question> questionList) {
-//		±N±ı­×§ïÃD¥Ø¤§¬y¤ô¸¹¼´¥X¦s¤Jlist
+//		å°‡æ¬²ä¿®æ”¹é¡Œç›®ä¹‹æµæ°´è™Ÿæ’ˆå‡ºå­˜å…¥list
 		List<Integer> updateQtNumList = new ArrayList<>();
 		for (Question questionNum : questionList) {
 			updateQtNumList.add(questionNum.getQuestionNumber());
 		}
-//		¥Î°İ¨÷½s¸¹¼´¥X¦¹°İ¨÷ªº©Ò¦³ÃD¥Ø
+//		ç”¨å•å·ç·¨è™Ÿæ’ˆå‡ºæ­¤å•å·çš„æ‰€æœ‰é¡Œç›®
 		List<Question> updateQuestionList = questionDao.findBySurveyNumberAndQuestionNumberIn(surveyNumber,
 				updateQtNumList);
-//		¨¾§b: µL¦¹°İ¨÷©Î¦¹°İ¨÷µL¦¹ÃD¥Ø
+//		é˜²å‘†: ç„¡æ­¤å•å·æˆ–æ­¤å•å·ç„¡æ­¤é¡Œç›®
 		if (updateQuestionList.size() != questionList.size()) {
-			return new QuestionResponse("µL¦¹°İ¨÷©ÎÃD¥Ø");
+			return new QuestionResponse(RtnCode.NOT_FOUND.getMessage());
 		}
 		
 		for(Question originQuesiton : updateQuestionList) {
 			for(Question reqQuestion : questionList) {
-//				­Y­ì°İÃD¬y¤ô¸¹»P±ı­×§ï¬y¤ô¸¹¤£²Å«h¸õ¥X
+//				è‹¥åŸå•é¡Œæµæ°´è™Ÿèˆ‡æ¬²ä¿®æ”¹æµæ°´è™Ÿä¸ç¬¦å‰‡è·³å‡º
 				if(originQuesiton.getQuestionNumber() != reqQuestion.getQuestionNumber()) {
 					continue;
 				}
-				// ¬Û²Å°õ¦æ­×§ï
-				// ¨¾§b: °İÃD¬°ªÅ
+				// ç›¸ç¬¦åŸ·è¡Œä¿®æ”¹
+				// é˜²å‘†: å•é¡Œç‚ºç©º
 				if(!StringUtils.hasText(reqQuestion.getQuestion())) {
-					return new QuestionResponse("½Ğ¿é¤J°İÃD");
+					return new QuestionResponse(RtnCode.CANNOT_EMPTY.getMessage());
 				}
-				// ³q¹L«h¦s¤J·s°İÃD
+				// é€šéå‰‡å­˜å…¥æ–°å•é¡Œ
 				originQuesiton.setQuestion(reqQuestion.getQuestion());
-				// ¨¾§b: ­Y¥¼¿é¤Jneeds«h¥¬ªL­È¬°false > «D¥²¶ñ
+				// é˜²å‘†: è‹¥æœªè¼¸å…¥needså‰‡å¸ƒæ—å€¼ç‚ºfalse > éå¿…å¡«
 				if(reqQuestion.getNeeds() == null) {
 					originQuesiton.setNeeds(false);
 				}
-				// ¨¾§b: ­Y¥¼¿é¤Jmultiple«h¥¬ªL­È¬°false > ³æ¿ï
+				// é˜²å‘†: è‹¥æœªè¼¸å…¥multipleå‰‡å¸ƒæ—å€¼ç‚ºfalse > å–®é¸
 				if(reqQuestion.getMultiple() == null) {
 					originQuesiton.setMultiple(false);
 				}
-				// ¨¾§b: ¿ï¶µ¬°ªÅ
+				// é˜²å‘†: é¸é …ç‚ºç©º
 				if(!StringUtils.hasText(reqQuestion.getqOption())) {
-					return new QuestionResponse("½Ğ¿é¤J¿ï¶µ");
+					return new QuestionResponse(RtnCode.CANNOT_EMPTY.getMessage());
 				}
-				// ­Y³q¹L¦s¤J·s¿ï¶µ
+				// è‹¥é€šéå­˜å…¥æ–°é¸é …
 				originQuesiton.setqOption(reqQuestion.getqOption());
 			}
 		}
 
-		return new QuestionResponse(questionDao.saveAll(updateQuestionList), "­×§ï¦¨¥\");
+		return new QuestionResponse(questionDao.saveAll(updateQuestionList), RtnCode.SUCCESSFUL.getMessage());
 	}
 
+	@Override
+	public QuestionResponse findSurveyQuestion(int surveyNumber) {
+		
+		return new QuestionResponse(questionDao.findBySurveyNumber(surveyNumber), RtnCode.SUCCESSFUL.getMessage());
+	}
+
+	
+	
+	
 }

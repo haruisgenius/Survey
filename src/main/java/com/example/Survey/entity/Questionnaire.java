@@ -13,29 +13,29 @@ import javax.persistence.Table;
 @Table(name = "questionnaire")
 public class Questionnaire {
 
-//	¬y¤ô¸¹
+//	æµæ°´è™Ÿ
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "serial_number")
 	private Integer serialNumber;
 	
-//	°İ¨÷¦WºÙ
+//	å•å·åç¨±
 	@Column(name = "survey_name")
 	private String surveyName;
 	
-//	°İ¨÷»¡©ú(¥iªÅ)
+//	å•å·èªªæ˜(å¯ç©º)
 	@Column(name = "survey_caption")
 	private String surveyCaption;
 	
-//	°İ¨÷ª¬ºA (0=¥¼¶}©ñ, 1=¶}©ñ¤¤, 2=¤wµ²§ô)
+//	å•å·ç‹€æ…‹ (0=æœªé–‹æ”¾, 1=é–‹æ”¾ä¸­, 2=å·²çµæŸ)
 	@Column(name = "survey_status")
 	private int surveyStatus;
 	
-//	¶}©l¤é
+//	é–‹å§‹æ—¥
 	@Column(name = "start_date")
 	private LocalDate startDate;
 	
-//	µ²§ô¤é
+//	çµæŸæ—¥
 	@Column(name = "end_date")
 	private LocalDate endDate;
 	
@@ -57,7 +57,7 @@ public class Questionnaire {
 		this.endDate = endDate;
 	}
 	
-//	·s¼W°İ¨÷¥Î
+//	æ–°å¢å•å·ç”¨
 	public Questionnaire(String surveyName, String surveyCaption, int surveyStatus, LocalDate startDate,
 			LocalDate endDate) {
 		super();
@@ -74,7 +74,7 @@ public class Questionnaire {
 		return serialNumber;
 	}
 
-//	¬y¤ô¸¹¤£¥Îset
+//	æµæ°´è™Ÿä¸ç”¨set
 //	public void setSerialNumber(Integer serialNumber) {
 //		this.serialNumber = serialNumber;
 //	}

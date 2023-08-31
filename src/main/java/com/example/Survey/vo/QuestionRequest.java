@@ -1,5 +1,9 @@
 package com.example.Survey.vo;
 
+import java.util.List;
+
+import com.example.Survey.entity.Question;
+
 public class QuestionRequest {
 
 	private Integer questionNumber;
@@ -14,7 +18,7 @@ public class QuestionRequest {
 	
 	private String qOption;
 	
-//	private List<Question> addQuestion;
+	private List<Question> questionList;
 	
 //	private List<Integer> deleteQuestionList;
 	
@@ -86,6 +90,15 @@ public class QuestionRequest {
 		this.qOption = qOption;
 	}
 
+	public List<Question> getQuestionList() {
+		return questionList;
+	}
+
+	public void setQuestionList(List<Question> questionList) {
+		this.questionList = questionList;
+	}
+
+	
 	
 	
 	

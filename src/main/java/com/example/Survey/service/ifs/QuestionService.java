@@ -4,13 +4,18 @@ import java.util.List;
 
 import com.example.Survey.entity.Question;
 import com.example.Survey.vo.QuestionResponse;
+import com.example.Survey.vo.QuestionnaireResponse;
 
 public interface QuestionService {
 
-//	·s¼WÃD¥Ø
+//	æ–°å¢é¡Œç›®
 	public QuestionResponse createQuestion(List<Question> questionList);
 	
-//	½s¿èÃD¥Ø
+//	ç·¨è¼¯é¡Œç›®
 	public QuestionResponse updateQuestion(int surveyNumber, List<Question> questionList);
+	
+//	æ‰¾å•å·é¡Œç›®
+	public QuestionResponse findSurveyQuestion(int surveyNumber);
+
 
 }

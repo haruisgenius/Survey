@@ -11,29 +11,29 @@ import javax.persistence.Table;
 @Table(name = "question")
 public class Question {
 
-//	ÃD¥Ø¬y¤ô¸¹
+//	é¡Œç›®æµæ°´è™Ÿ
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "question_number")
 	private Integer questionNumber;
 	
-//	°İ¨÷½s¸¹
+//	å•å·ç·¨è™Ÿ
 	@Column(name = "survey_number")
 	private int surveyNumber;
 	
-//	°İÃD
+//	å•é¡Œ
 	@Column(name = "question")
 	private String question;
 	
-//	¥²¶ñ
+//	å¿…å¡«
 	@Column(name = "needs")
 	private Boolean needs;
 	
-//	³æ½Æ¿ï
+//	å–®è¤‡é¸
 	@Column(name = "multiple")
 	private Boolean multiple;
 	
-//	¿ï¶µ
+//	é¸é …
 	@Column(name = "q_option")
 	private String qOption;
 
@@ -55,7 +55,7 @@ public class Question {
 		this.qOption = qOption;
 	}
 	
-//	·s¼WÃD¥Ø
+//	æ–°å¢é¡Œç›®
 	public Question(int surveyNumber, String question, Boolean needs, Boolean multiple, String qOption) {
 		super();
 		this.surveyNumber = surveyNumber;
@@ -65,7 +65,7 @@ public class Question {
 		this.qOption = qOption;
 	}
 	
-//	½s¿èÃD¥Ø
+//	ç·¨è¼¯é¡Œç›®
 	public void updateQuestion(Integer questionNumber, String question, Boolean needs, Boolean multiple,
 			String qOption) {
 		this.questionNumber = questionNumber;
@@ -81,7 +81,7 @@ public class Question {
 		return questionNumber;
 	}
 
-//	¬y¤ô¸¹¤£¥ÎSet
+//	æµæ°´è™Ÿä¸ç”¨Set
 //	public void setQuestionNumber(Integer questionNumber) {
 //		this.questionNumber = questionNumber;
 //	}

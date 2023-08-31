@@ -21,7 +21,7 @@ public class QuestionnaireRequest {
 
 	private LocalDate endDate;
 	
-//	§R°£°İ¨÷¥Î
+//	åˆªé™¤å•å·ç”¨
 	List<Integer> deleteSurveyList;
 	
 
